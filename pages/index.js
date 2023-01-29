@@ -38,7 +38,7 @@ const Home = () => {
         <div style={{ width: "100%" }}>
           <SearchFields />
 
-          <Table />
+          <Table data={data} />
         </div>
       </main>
     </>

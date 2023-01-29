@@ -1,29 +1,36 @@
 import DataTable from "react-data-table-component";
 
-const Table = () => {
+const Table = ({ data }) => {
   const columns = [
     {
-      name: "Title",
-      selector: (row) => row.title,
+      name: "Log ID",
+      selector: (row) => row.logId,
       sortable: true,
     },
     {
-      name: "Year",
-      selector: (row) => row.year,
+      name: "Application Type",
+      selector: (row) => row.applicationType,
       sortable: true,
     },
-  ];
-
-  const data = [
     {
-      id: 1,
-      title: "Beetlejuice",
-      year: "1988",
+      name: "Application ID",
+      selector: (row) => row.applicationId,
+      sortable: true,
     },
     {
-      id: 2,
-      title: "Ghostbusters",
-      year: "1984",
+      name: "Action",
+      selector: (row) => row.actionType,
+      sortable: true,
+    },
+    {
+      name: "Action Details",
+      selector: (row) => row.actionDetails,
+      sortable: true,
+    },
+    {
+      name: "Date:Time",
+      selector: (row) => row.creationTimestamp,
+      sortable: true,
     },
   ];
 
