@@ -1,10 +1,30 @@
 import styles from "@/styles/Home.module.css";
 import Head from "next/head";
+import axios from "axios";
 
 import Table from "./components/Table";
 import SearchFields from "./components/Table/SearchFields";
+import { useEffect, useState } from "react";
 
 const Home = () => {
+  const [data, setData] = useState([]);
+
+  const callDataAPI = async () => {
+    await axios
+      .get("https://run.mocky.io/v3/a2fbc23e-069e-4ba5-954c-cd910986f40f")
+      .then((res) => {
+        setData(res.data?.result?.auditLog);
+        console.log("Res", res.data);
+      })
+      .catch((e) => {
+        console.log("GetDate error", e);
+      });
+  };
+
+  useEffect(() => {
+    callDataAPI();
+  }, []);
+
   return (
     <>
       <Head>
