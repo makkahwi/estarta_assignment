@@ -8,9 +8,22 @@ const DataView = () => {
   const [data, setData] = useState([]);
   const [searchFields, setSearchFields] = useState({});
 
+  const dateFilter = (key) => {
+    switch (key) {
+      case "fromDate":
+        return `creationTimestamp>=${searchFields[key]}`;
+      case "toDate":
+        return `creationTimestamp<=${searchFields[key]}`;
+      default:
+        return `creationTimestamp=${searchFields[key]}`;
+    }
+  };
+
   const getParams = () =>
     Object.keys(searchFields)
-      ?.map((key) => `${key}=${searchFields[key]}`)
+      ?.map((key) =>
+        key.includes("Date") ? dateFilter(key) : `${key}=${searchFields[key]}`
+      )
       .join("&");
 
   const callDataAPI = async () => {
