@@ -1,6 +1,7 @@
 import styles from "@/styles/Home.module.css";
-import { Inter } from "@next/font/google";
 import Head from "next/head";
+
+import Table from "./components/Table";
 
 const Home = () => {
   return (
@@ -13,7 +14,9 @@ const Home = () => {
       </Head>
 
       <main className={styles.main}>
-        <div>Content Placeholder</div>
+        <div style={{ width: "100%" }}>
+          <Table />
+        </div>
       </main>
     </>
   );
