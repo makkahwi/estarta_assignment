@@ -39,7 +39,7 @@ const Table = ({ data }) => {
 
   return (
     <>
-      <DataTable columns={columns} data={data} pagination fixedHeader />
+      <DataTable columns={columns} data={data || [{}]} pagination fixedHeader />
     </>
   );
 };

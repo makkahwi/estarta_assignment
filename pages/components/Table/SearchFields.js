@@ -1,6 +1,11 @@
 import { cleanText } from ".";
 
-const SearchFields = ({ searchFields, setSearchFields, lists, onSubmit }) => {
+const SearchFields = ({
+  searchFields = {},
+  setSearchFields,
+  lists,
+  onSubmit,
+}) => {
   const fields = [
     { title: "Log ID", name: "logId", type: "text" },
     {
