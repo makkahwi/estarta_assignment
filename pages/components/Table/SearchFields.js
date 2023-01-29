@@ -1,3 +1,5 @@
+import { cleanText } from ".";
+
 const SearchFields = ({ searchFields, setSearchFields, lists, onSubmit }) => {
   const fields = [
     { title: "Log ID", name: "logId", type: "text" },
@@ -5,11 +7,11 @@ const SearchFields = ({ searchFields, setSearchFields, lists, onSubmit }) => {
       title: "Application Type",
       name: "applicationType",
       type: "select",
-      options: lists.applicationType
+      options: lists?.applicationType
         ?.filter((row) => row?.length)
         ?.filter((v, i, a) => a.indexOf(v) === i)
         ?.map((row) => ({
-          label: row,
+          label: cleanText(row),
           value: row,
         })),
     },

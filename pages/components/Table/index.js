@@ -1,5 +1,8 @@
 import DataTable from "react-data-table-component";
 
+export const cleanText = (text) =>
+  text ? text.replace(/_/g, " ").toLowerCase() : "";
+
 const Table = ({ data }) => {
   const columns = [
     {
@@ -9,7 +12,7 @@ const Table = ({ data }) => {
     },
     {
       name: "Application Type",
-      selector: (row) => row.applicationType,
+      selector: (row) => cleanText(row.applicationType),
       sortable: true,
     },
     {
@@ -19,7 +22,7 @@ const Table = ({ data }) => {
     },
     {
       name: "Action",
-      selector: (row) => row.actionType,
+      selector: (row) => cleanText(row.actionType),
       sortable: true,
     },
     {
