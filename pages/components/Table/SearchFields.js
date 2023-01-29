@@ -1,3 +1,13 @@
+import Button from "@mui/material/Button";
+import FormControl from "@mui/material/FormControl";
+import Grid from "@mui/material/Grid";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import TextField from "@mui/material/TextField";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { cleanText } from ".";
 
 const SearchFields = ({
@@ -29,64 +39,82 @@ const SearchFields = ({
   ];
 
   return (
-    <form style={{ display: "flex" }} onSubmit={onSubmit}>
-      {fields?.map(({ title, name, type, options }, i) => (
-        <div
-          key={i}
-          style={{
-            margin: `2vh 2vw 2vh 0`,
-          }}
-        >
-          <label style={{ display: "block", marginBottom: "1vh" }}>
-            {title}
-          </label>
+    <div style={{ margin: "2vh auto" }}>
+      <Grid container spacing={1}>
+        {fields?.map(({ title, name, type, options }, i) => (
+          <Grid item md={3} xs={6} key={i} style={{ margin: "1vh auto" }}>
+            <FormControl fullWidth>
+              {type === "select" ? (
+                <>
+                  <InputLabel>{title}</InputLabel>
+                  <Select
+                    label={title}
+                    style={{ width: "100%" }}
+                    name={name}
+                    value={searchFields[name]}
+                    onChange={(e) =>
+                      setSearchFields((current) => ({
+                        ...current,
+                        [name]: e.target.value,
+                      }))
+                    }
+                  >
+                    {options?.map(({ label, value }, y) => (
+                      <MenuItem key={y} value={value}>
+                        {label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </>
+              ) : type === "date" ? (
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DesktopDatePicker
+                    label={title}
+                    name={name}
+                    inputFormat="DD/MM/YYYY"
+                    value={searchFields[name]}
+                    onChange={(e) =>
+                      setSearchFields((current) => ({
+                        ...current,
+                        [name]: e,
+                      }))
+                    }
+                    renderInput={(params) => <TextField {...params} />}
+                  />
+                </LocalizationProvider>
+              ) : (
+                <TextField
+                  label={title}
+                  type={type}
+                  name={name}
+                  style={{ width: "100%" }}
+                  value={searchFields[name]}
+                  onChange={(e) =>
+                    setSearchFields((current) => ({
+                      ...current,
+                      [name]: e.target.value,
+                    }))
+                  }
+                />
+              )}
+            </FormControl>
+          </Grid>
+        ))}
 
-          {type === "select" ? (
-            <select
-              style={{ width: "100%" }}
-              name={name}
-              value={searchFields[name]}
-              onChange={(e) =>
-                setSearchFields((current) => ({
-                  ...current,
-                  [name]: e.target.value,
-                }))
-              }
-            >
-              {options?.map(({ label, value }, y) => (
-                <option key={y} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <input
-              type={type}
-              name={name}
-              style={{ width: "100%" }}
-              value={searchFields[name]}
-              onChange={(e) =>
-                setSearchFields((current) => ({
-                  ...current,
-                  [name]: e.target.value,
-                }))
-              }
-            />
-          )}
-        </div>
-      ))}
+        <Grid item md={9} xs={6} />
 
-      <div
-        style={{
-          margin: `2vh auto 2vh auto`,
-        }}
-      >
-        <label style={{ display: "block", color: "rgba(0,0,0,0)" }}>.</label>
-        <button type={"submit"} style={{ width: "100%" }}>
-          Search Logger
-        </button>
-      </div>
-    </form>
+        <Grid item md={3} xs={6}>
+          <Button
+            variant="contained"
+            type={"submit"}
+            style={{ width: "100%" }}
+            onClick={onSubmit}
+          >
+            Search Logger
+          </Button>
+        </Grid>
+      </Grid>
+    </div>
   );
 };
 
