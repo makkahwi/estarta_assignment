@@ -2,6 +2,7 @@ import styles from "@/styles/Home.module.css";
 import Head from "next/head";
 
 import Table from "./components/Table";
+import SearchFields from "./components/Table/SearchFields";
 
 const Home = () => {
   return (
@@ -15,6 +16,8 @@ const Home = () => {
 
       <main className={styles.main}>
         <div style={{ width: "100%" }}>
+          <SearchFields />
+
           <Table />
         </div>
       </main>
