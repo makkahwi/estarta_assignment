@@ -1,17 +1,25 @@
 import styles from "@/styles/Home.module.css";
-import Head from "next/head";
 import axios from "axios";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 
 import Table from "./components/Table";
 import SearchFields from "./components/Table/SearchFields";
-import { useEffect, useState } from "react";
 
 const Home = () => {
   const [data, setData] = useState([]);
+  const [searchFields, setSearchFields] = useState({});
+
+  const getParams = () =>
+    Object.keys(searchFields)
+      ?.map((key) => `${key}=${searchFields[key]}`)
+      .join("&");
 
   const callDataAPI = async () => {
     await axios
-      .get("https://run.mocky.io/v3/a2fbc23e-069e-4ba5-954c-cd910986f40f")
+      .get(
+        `https://run.mocky.io/v3/a2fbc23e-069e-4ba5-954c-cd910986f40f?${getParams()}`
+      )
       .then((res) => {
         setData(res.data?.result?.auditLog);
         console.log("Res", res.data);
@@ -25,6 +33,11 @@ const Home = () => {
     callDataAPI();
   }, []);
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    callDataAPI();
+  };
+
   return (
     <>
       <Head>
@@ -36,7 +49,12 @@ const Home = () => {
 
       <main className={styles.main}>
         <div style={{ width: "100%" }}>
-          <SearchFields />
+          <SearchFields
+            searchFields={searchFields}
+            lists={{ applicationType: data?.map((row) => row.applicationType) }}
+            setSearchFields={setSearchFields}
+            onSubmit={onSubmit}
+          />
 
           <Table data={data} />
         </div>

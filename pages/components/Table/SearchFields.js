@@ -1,22 +1,25 @@
-const SearchFields = () => {
+const SearchFields = ({ searchFields, setSearchFields, lists, onSubmit }) => {
   const fields = [
-    { title: "Employee Name", name: "employeeName", type: "text" },
-    { title: "Action Type", name: "actionType", type: "text" },
+    { title: "Log ID", name: "logId", type: "text" },
     {
       title: "Application Type",
       name: "applicationType",
       type: "select",
-      options: [{ label: "One", value: 1 }],
+      options: lists.applicationType
+        ?.filter((row) => row?.length)
+        ?.filter((v, i, a) => a.indexOf(v) === i)
+        ?.map((row) => ({
+          label: row,
+          value: row,
+        })),
     },
+    { title: "Application ID", name: "applicationId", type: "text" },
+    { title: "Action Type", name: "actionType", type: "text" },
+    { title: "Action Details", name: "actionDetails", type: "text" },
     { title: "From Date", name: "fromDate", type: "date" },
     { title: "To Date", name: "toDate", type: "date" },
-    { title: "Application ID", name: "applicationID", type: "text" },
+    { title: "On Date", name: "onDate", type: "date" },
   ];
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    console.log(e.target.applicationID.value);
-  };
 
   return (
     <form style={{ display: "flex" }} onSubmit={onSubmit}>
@@ -32,7 +35,17 @@ const SearchFields = () => {
           </label>
 
           {type === "select" ? (
-            <select style={{ width: "100%" }} name={name}>
+            <select
+              style={{ width: "100%" }}
+              name={name}
+              value={searchFields[name]}
+              onChange={(e) =>
+                setSearchFields((current) => ({
+                  ...current,
+                  [name]: e.target.value,
+                }))
+              }
+            >
               {options?.map(({ label, value }, y) => (
                 <option key={y} value={value}>
                   {label}
@@ -40,7 +53,18 @@ const SearchFields = () => {
               ))}
             </select>
           ) : (
-            <input type={type} name={name} style={{ width: "100%" }} />
+            <input
+              type={type}
+              name={name}
+              style={{ width: "100%" }}
+              value={searchFields[name]}
+              onChange={(e) =>
+                setSearchFields((current) => ({
+                  ...current,
+                  [name]: e.target.value,
+                }))
+              }
+            />
           )}
         </div>
       ))}
