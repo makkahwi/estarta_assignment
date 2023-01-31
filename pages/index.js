@@ -17,7 +17,7 @@ const Home = () => {
 
       <Header />
 
-      <main className={styles.main}>
+      <main className={styles.main} style={{"backgroundColor": "#000000"}}>
         <DataView />
       </main>
 
