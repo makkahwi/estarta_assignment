@@ -8,6 +8,7 @@ import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+
 import { cleanText } from ".";
 
 const SearchFields = ({
@@ -34,12 +35,12 @@ const SearchFields = ({
     { title: "Action Type", name: "actionType", type: "text" },
     { title: "Action Details", name: "actionDetails", type: "text" },
     { title: "From Date", name: "fromDate", type: "date" },
-    { title: "To Date", name: "toDate", type: "date" },
     { title: "On Date", name: "onDate", type: "date" },
+    { title: "To Date", name: "toDate", type: "date" },
   ];
 
   return (
-    <div style={{ margin: "2vh auto" }}>
+    <form style={{ margin: "2vh auto" }}>
       <Grid container spacing={1}>
         {fields?.map(({ title, name, type, options }, i) => (
           <Grid item md={3} xs={6} key={i} style={{ margin: "1vh auto" }}>
@@ -59,6 +60,8 @@ const SearchFields = ({
                       }))
                     }
                   >
+                    <MenuItem value={""}>{"No Selection"}</MenuItem>
+
                     {options?.map(({ label, value }, y) => (
                       <MenuItem key={y} value={value}>
                         {label}
@@ -106,15 +109,15 @@ const SearchFields = ({
         <Grid item md={3} xs={6}>
           <Button
             variant="contained"
-            type={"submit"}
             style={{ width: "100%" }}
+            type="submit"
             onClick={onSubmit}
           >
             Search Logger
           </Button>
         </Grid>
       </Grid>
-    </div>
+    </form>
   );
 };
 
