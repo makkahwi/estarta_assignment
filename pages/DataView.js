@@ -34,7 +34,9 @@ const DataView = () => {
     callDataAPI();
   }, []);
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
+
     if (Object.keys(searchFields)?.length) {
       const searchDataKeys = Object.keys(searchFields)?.filter(
         (key) => searchFields[key]

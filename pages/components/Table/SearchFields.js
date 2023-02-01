@@ -40,7 +40,7 @@ const SearchFields = ({
   ];
 
   return (
-    <div style={{ margin: "2vh auto" }}>
+    <form style={{ margin: "2vh auto" }}>
       <Grid container spacing={1}>
         {fields?.map(({ title, name, type, options }, i) => (
           <Grid item md={3} xs={6} key={i} style={{ margin: "1vh auto" }}>
@@ -110,13 +110,14 @@ const SearchFields = ({
           <Button
             variant="contained"
             style={{ width: "100%" }}
+            type="submit"
             onClick={onSubmit}
           >
             Search Logger
           </Button>
         </Grid>
       </Grid>
-    </div>
+    </form>
   );
 };
 
