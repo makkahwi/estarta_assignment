@@ -42,6 +42,8 @@ const DataView = () => {
         (key) => searchFields[key]
       );
 
+      console.log({ searchFields, searchDataKeys });
+
       const checkDate = (row, key) => {
         switch (key) {
           case "fromDate":
@@ -56,8 +58,8 @@ const DataView = () => {
             );
           case "onDate":
             return (
-              formatDate(searchFields[key].$d) ==
-              formatDate(row["creationTimestamp"])
+              formatDate(searchFields[key].$d).format() ==
+              formatDate(row["creationTimestamp"]).format()
             );
         }
       };
