@@ -1,38 +1,28 @@
 import axios from "axios";
+import moment from "moment/moment";
 import { useEffect, useState } from "react";
 
 import Table from "./components/Table";
 import SearchFields from "./components/Table/SearchFields";
 
 const DataView = () => {
-  const [data, setData] = useState([]);
-  const [searchFields, setSearchFields] = useState({});
+  const [apiData, setApiData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchFields, setSearchFields] = useState({
+    applicationType: "",
+    fromDate: null,
+    toDate: null,
+    onDate: null,
+  });
 
-  const dateFilter = (key) => {
-    switch (key) {
-      case "fromDate":
-        return `creationTimestamp>=${searchFields[key]}`;
-      case "toDate":
-        return `creationTimestamp<=${searchFields[key]}`;
-      default:
-        return `creationTimestamp=${searchFields[key]}`;
-    }
-  };
-
-  const getParams = () =>
-    Object.keys(searchFields)
-      ?.map((key) =>
-        key.includes("Date") ? dateFilter(key) : `${key}=${searchFields[key]}`
-      )
-      .join("&");
+  const formatDate = (date) => moment(date).startOf("day");
 
   const callDataAPI = async () => {
     await axios
-      .get(
-        `https://run.mocky.io/v3/a2fbc23e-069e-4ba5-954c-cd910986f40f?${getParams()}`
-      )
+      .get(`https://run.mocky.io/v3/a2fbc23e-069e-4ba5-954c-cd910986f40f`)
       .then((res) => {
-        setData(res.data?.result?.auditLog);
+        setApiData(res.data?.result?.auditLog);
+        setFilteredData(res.data?.result?.auditLog);
         console.log("Data Called Successfully");
       })
       .catch((e) => {
@@ -44,9 +34,45 @@ const DataView = () => {
     callDataAPI();
   }, []);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    callDataAPI();
+  const onSubmit = () => {
+    if (Object.keys(searchFields)?.length) {
+      const searchDataKeys = Object.keys(searchFields)?.filter(
+        (key) => searchFields[key]
+      );
+
+      const checkDate = (row, key) => {
+        switch (key) {
+          case "fromDate":
+            return (
+              formatDate(searchFields[key].$d) <=
+              formatDate(row["creationTimestamp"])
+            );
+          case "toDate":
+            return (
+              formatDate(searchFields[key].$d) >=
+              formatDate(row["creationTimestamp"])
+            );
+          case "onDate":
+            return (
+              formatDate(searchFields[key].$d) ==
+              formatDate(row["creationTimestamp"])
+            );
+        }
+      };
+
+      const checkRow = (row) =>
+        searchDataKeys
+          .map((key) =>
+            key.includes("Date")
+              ? checkDate(row, key)
+              : `${row[key]}`
+                  .toLowerCase()
+                  .includes(`${searchFields[key]}`.toLowerCase())
+          )
+          .reduce((final, current) => (current ? final : current), true);
+
+      setFilteredData(apiData.filter(checkRow));
+    }
   };
 
   return (
@@ -54,12 +80,14 @@ const DataView = () => {
       <div style={{ width: "100%" }}>
         <SearchFields
           searchFields={searchFields}
-          lists={{ applicationType: data?.map((row) => row.applicationType) }}
+          lists={{
+            applicationType: apiData?.map((row) => row.applicationType),
+          }}
           setSearchFields={setSearchFields}
           onSubmit={onSubmit}
         />
 
-        <Table data={data} />
+        <Table data={filteredData} />
       </div>
     </>
   );
