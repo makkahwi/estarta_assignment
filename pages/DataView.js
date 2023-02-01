@@ -73,7 +73,9 @@ const DataView = () => {
           )
           .reduce((final, current) => (current ? final : current), true);
 
-      setFilteredData(apiData.filter(checkRow));
+      if (searchDataKeys.length) {
+        setFilteredData(apiData.filter(checkRow));
+      }
     }
   };
 
